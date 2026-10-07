@@ -25,7 +25,47 @@ export type PublicProduct = {
   isActive: boolean
 }
 
-export const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://localhost:8080'
+function normalizeBaseUrl(raw: string) {
+  const trimmed = raw.replace(/\/+$/, '')
+  if (trimmed.endsWith('/api/v1')) return trimmed
+  return `${trimmed}/api/v1`
+}
+
+export const API_BASE = normalizeBaseUrl(process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://localhost:8080')
+
+export function normalizeShopReference(input: string) {
+  const raw = (input ?? '').trim()
+  if (!raw) return ''
+
+  const candidates = [raw]
+
+  try {
+    candidates.push(decodeURIComponent(raw))
+  } catch {
+    // ignore decode errors and keep the original raw value
+  }
+
+  for (const candidate of candidates) {
+    try {
+      const parsed = new URL(candidate)
+      const segments = parsed.pathname.split('/').filter(Boolean)
+      const storeIndex = segments.lastIndexOf('store')
+      const fallbackSegment = segments[segments.length - 1] ?? ''
+      const next = storeIndex >= 0 ? segments[storeIndex + 1] ?? fallbackSegment : fallbackSegment
+      if (next) return next.trim()
+    } catch {
+      // fall through to the non-URL path handling below
+    }
+
+    const segments = candidate.split(/[/?#]/).filter(Boolean)
+    const last = segments[segments.length - 1]
+    if (last && last !== 'store') {
+      return last.trim()
+    }
+  }
+
+  return raw
+}
 
 export const formatMoney = (cents: number, currency = 'NGN') =>
   new Intl.NumberFormat('en-NG', {
