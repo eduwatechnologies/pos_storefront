@@ -115,6 +115,14 @@ function TruckIcon({ className = '' }: { className?: string }) {
     </svg>
   )
 }
+function XIcon({ className = '' }: { className?: string }) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+      <path d="M18 6 6 18" />
+      <path d="m6 6 12 12" />
+    </svg>
+  )
+}
 function ShieldIcon({ className = '' }: { className?: string }) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
@@ -137,6 +145,8 @@ export function StorefrontContent({ shopReference }: { shopReference: string }) 
   const [error, setError] = useState<string | null>(null)
   const [storefrontDisabled, setStorefrontDisabled] = useState(false)
   const [success, setSuccess] = useState<string | null>(null)
+  const [cartOpen, setCartOpen] = useState(false)
+
 
   const [search, setSearch] = useState('')
   const [activeCategory, setActiveCategory] = useState<string | null>(null)
@@ -225,10 +235,10 @@ export function StorefrontContent({ shopReference }: { shopReference: string }) 
     }
     slides.push({
       title: featuredProducts.length
-        ? 'This week’s top picks'
+        ? 'This weekÃ¢â‚¬â„¢s top picks'
         : 'Order ahead, skip the wait',
       subtitle: featuredProducts.length
-        ? `Handpicked from our best sellers — ${formatMoney(featuredProducts[0].priceCents, shop?.currency)} and up.`
+        ? `Handpicked from our best sellers Ã¢â‚¬â€ ${formatMoney(featuredProducts[0].priceCents, shop?.currency)} and up.`
         : 'Place your order online and pick up curbside or get it delivered.',
       cta: featuredProducts.length ? 'Explore best sellers' : 'Browse products',
       image: null,
@@ -340,14 +350,14 @@ export function StorefrontContent({ shopReference }: { shopReference: string }) 
           <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 md:px-8">
             <div className="flex items-center gap-2 text-slate-700">
               <StoreIcon className="h-5 w-5" />
-              <span className="font-semibold">Loading store…</span>
+              <span className="font-semibold">Loading storeÃ¢â‚¬Â¦</span>
             </div>
           </div>
         </header>
         <div className="mx-auto max-w-3xl p-8 text-sm text-slate-500">
           <div className="flex items-center justify-center py-24">
             <div className="h-8 w-8 animate-spin rounded-full border-2 border-slate-200 border-t-slate-700" />
-            <span className="ml-3 text-base">Loading storefront…</span>
+            <span className="ml-3 text-base">Loading storefrontÃ¢â‚¬Â¦</span>
           </div>
         </div>
       </div>
@@ -439,7 +449,7 @@ export function StorefrontContent({ shopReference }: { shopReference: string }) 
             </div>
             <div className="leading-tight hidden sm:block">
               <div className="text-sm font-bold text-slate-900">{shop.businessName || shop.name}</div>
-              <div className="text-[11px] text-slate-500">Shop online · Pay on delivery</div>
+              <div className="text-[11px] text-slate-500">Shop online Ã‚Â· Pay on delivery</div>
             </div>
           </a>
 
@@ -449,7 +459,7 @@ export function StorefrontContent({ shopReference }: { shopReference: string }) 
               type="search"
               value={search}
               onChange={(e) => { setSearch(e.target.value); setActiveCategory(null) }}
-              placeholder="Search products, categories…"
+              placeholder="Search products, categoriesÃ¢â‚¬Â¦"
               className="w-full rounded-full border border-slate-200 bg-white py-2.5 pl-10 pr-4 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900/10"
             />
           </div>
@@ -465,7 +475,7 @@ export function StorefrontContent({ shopReference }: { shopReference: string }) 
 
           <button
             type="button"
-            onClick={() => cartSummaryRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+            onClick={() => setCartOpen(true)}
             className="relative inline-flex items-center gap-2 rounded-full px-3.5 py-2 text-sm font-semibold text-white shadow-sm transition-transform hover:-translate-y-0.5"
             style={{ background: primaryColor }}
           >
@@ -487,7 +497,7 @@ export function StorefrontContent({ shopReference }: { shopReference: string }) 
                 type="search"
                 value={search}
                 onChange={(e) => { setSearch(e.target.value); setActiveCategory(null) }}
-                placeholder="Search products…"
+                placeholder="Search productsÃ¢â‚¬Â¦"
                 className="w-full rounded-full border border-slate-200 bg-white py-2 pl-9 pr-4 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900/10"
               />
             </div>
@@ -498,7 +508,7 @@ export function StorefrontContent({ shopReference }: { shopReference: string }) 
       <main id="top" className="mx-auto max-w-7xl px-4 py-6 md:px-8 md:py-8">
         {success ? (
           <div className="mb-6 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-800">
-            <div className="font-semibold">Order placed ✓</div>
+            <div className="font-semibold">Order placed Ã¢Å“â€œ</div>
             <div className="mt-0.5">{success}</div>
           </div>
         ) : null}
@@ -592,7 +602,7 @@ export function StorefrontContent({ shopReference }: { shopReference: string }) 
               </div>
               <div className="text-xs text-slate-500">
                 {shop.storefrontPickupOnly
-                  ? 'Pick up your order in-store — no waiting.'
+                  ? 'Pick up your order in-store Ã¢â‚¬â€ no waiting.'
                   : deliveryFeeCents > 0
                     ? `Flat delivery fee ${formatMoney(deliveryFeeCents, shop.currency)}.`
                     : 'Free delivery on all orders.'}
@@ -663,8 +673,8 @@ export function StorefrontContent({ shopReference }: { shopReference: string }) 
           </section>
         ) : null}
 
-        <section id="products-section" className="mt-10 grid gap-8 lg:grid-cols-[minmax(0,1fr)_360px]">
-          <div className="space-y-8">
+        <section id="products-section" className="mt-10">
+          <div className="space-y-8 max-w-5xl mx-auto">
             {activeCategory === null && !search && featuredProducts.length > 0 ? (
               <section>
                 <div className="mb-4 flex items-end justify-between">
@@ -691,7 +701,7 @@ export function StorefrontContent({ shopReference }: { shopReference: string }) 
               <div className="mb-4 flex items-end justify-between gap-3">
                 <div>
                   <h3 className="text-lg font-bold text-slate-900">
-                    {activeCategory ? <span className="capitalize">{activeCategory}</span> : search ? `Results for “${search}”` : 'All products'}
+                    {activeCategory ? <span className="capitalize">{activeCategory}</span> : search ? `Results for Ã¢â‚¬Å“${search}Ã¢â‚¬Â` : 'All products'}
                   </h3>
                   <p className="text-xs text-slate-500">{visibleProducts.length} item{visibleProducts.length === 1 ? '' : 's'} available</p>
                 </div>
@@ -730,153 +740,23 @@ export function StorefrontContent({ shopReference }: { shopReference: string }) 
               )}
             </section>
           </div>
-
-          <aside ref={cartSummaryRef} className="space-y-5 lg:sticky lg:top-24 lg:self-start">
-            <Card className="overflow-hidden border-slate-200 bg-white shadow-sm">
-              <CardHeader className="border-b border-slate-100 px-5 py-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <CardTitle className="text-base font-bold text-slate-900">Your cart</CardTitle>
-                    <CardDescription className="text-[12px]">{cart.length} item{cart.length === 1 ? '' : 's'} · {cartCount} unit{cartCount === 1 ? '' : 's'}</CardDescription>
-                  </div>
-                  <div
-                    className="flex h-9 w-9 items-center justify-center rounded-xl text-white"
-                    style={{ background: primaryColor }}
-                  >
-                    <ShoppingCart className="h-4 w-4" />
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-5 px-5 py-5">
-                {cart.length === 0 ? (
-                  <div className="flex flex-col items-center justify-center gap-2 py-10 text-center">
-                    <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-100 text-slate-400">
-                      <ShoppingCart className="h-6 w-6" />
-                    </div>
-                    <p className="text-sm font-semibold text-slate-700">Your cart is empty</p>
-                    <p className="text-xs text-slate-500">Add some products from the store.</p>
-                  </div>
-                ) : (
-                  <div className="space-y-3 max-h-72 overflow-y-auto pr-1">
-                    {cart.map((item) => (
-                      <div key={item.productId} className="flex items-start gap-3 rounded-xl border border-slate-100 bg-slate-50/60 p-2.5">
-                        <div className="h-14 w-14 shrink-0 overflow-hidden rounded-lg bg-slate-100">
-                          {item.imageUrl ? (
-                            <img src={item.imageUrl} alt={item.name} className="h-full w-full object-cover" />
-                          ) : (
-                            <div className="flex h-full w-full items-center justify-center text-slate-400">
-                              <StoreIcon className="h-5 w-5" />
-                            </div>
-                          )}
-                        </div>
-                        <div className="min-w-0 flex-1">
-                          <div className="flex items-start justify-between gap-2">
-                            <p className="truncate text-sm font-semibold text-slate-800">{item.name}</p>
-                            <button
-                              type="button"
-                              onClick={() => removeFromCart(item.productId)}
-                              className="text-slate-400 hover:text-red-600"
-                              aria-label="Remove item"
-                            >
-                              <TrashIcon className="h-4 w-4" />
-                            </button>
-                          </div>
-                          <p className="text-xs font-medium text-slate-500 mt-0.5">
-                            {formatMoney(item.priceCents, shop.currency)} each
-                          </p>
-                          <div className="mt-2 flex items-center justify-between">
-                            <div className="flex items-center gap-1 rounded-full border border-slate-200 bg-white p-0.5">
-                              <button
-                                type="button"
-                                onClick={() => updateQty(item.productId, item.qty - 1)}
-                                className="flex h-7 w-7 items-center justify-center rounded-full text-slate-600 hover:bg-slate-100"
-                                aria-label="Decrease quantity"
-                              >
-                                <MinusIcon className="h-3.5 w-3.5" />
-                              </button>
-                              <span className="min-w-6 text-center text-xs font-semibold text-slate-700">{item.qty}</span>
-                              <button
-                                type="button"
-                                onClick={() => updateQty(item.productId, item.qty + 1)}
-                                className="flex h-7 w-7 items-center justify-center rounded-full text-slate-600 hover:bg-slate-100"
-                                aria-label="Increase quantity"
-                              >
-                                <PlusIcon className="h-3.5 w-3.5" />
-                              </button>
-                            </div>
-                            <span className="text-sm font-bold text-slate-800">
-                              {formatMoney(item.priceCents * item.qty, shop.currency)}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-
-                <div className="space-y-2 rounded-xl border border-slate-200 bg-slate-50/60 p-4 text-sm">
-                  <div className="flex justify-between text-slate-600">
-                    <span>Subtotal</span>
-                    <span className="font-medium text-slate-800">{formatMoney(subtotalCents, shop.currency)}</span>
-                  </div>
-                  <div className="flex justify-between text-slate-600">
-                    <span>{shop.storefrontPickupOnly ? 'Pickup (no fee)' : 'Delivery fee'}</span>
-                    <span className="font-medium text-slate-800">
-                      {shop.storefrontPickupOnly ? '—' : formatMoney(deliveryFeeCents, shop.currency)}
-                    </span>
-                  </div>
-                  <div className="flex justify-between border-t border-slate-200 pt-2 text-base font-extrabold text-slate-900">
-                    <span>Total</span>
-                    <span>{formatMoney(totalCents, shop.currency)}</span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="border-slate-200 bg-white shadow-sm">
-              <CardHeader className="border-b border-slate-100 px-5 py-4">
-                <CardTitle className="text-base font-bold text-slate-900">Customer details</CardTitle>
-                <CardDescription className="text-[12px]">We’ll use this to confirm your order.</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-3 px-5 py-5">
-                <input
-                  value={customerName}
-                  onChange={(e) => setCustomerName(e.target.value)}
-                  placeholder="Full name"
-                  className="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900/10"
-                />
-                <input
-                  value={customerPhone}
-                  onChange={(e) => setCustomerPhone(e.target.value)}
-                  placeholder="Phone number"
-                  className="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900/10"
-                />
-                <input
-                  value={customerEmail}
-                  onChange={(e) => setCustomerEmail(e.target.value)}
-                  placeholder="Email (optional)"
-                  className="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900/10"
-                />
-
-                {error ? (
-                  <div className="rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-xs text-red-700">{error}</div>
-                ) : null}
-
-                <Button
-                  className="w-full !h-12 rounded-xl text-sm font-bold shadow-sm hover:opacity-95"
-                  style={{ background: primaryColor, borderColor: primaryColor }}
-                  onClick={handleCheckout}
-                  disabled={submitting || cart.length === 0}
-                >
-                  {submitting ? 'Placing order…' : cart.length === 0 ? 'Cart is empty' : 'Place order'}
-                </Button>
-                <p className="text-[11px] text-center text-slate-500">
-                  By placing an order you agree to the store’s terms.
-                </p>
-              </CardContent>
-            </Card>
-          </aside>
         </section>
+
+
+      {cartOpen ? (
+        <div className="fixed inset-0 z-[100]">
+          <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={() => setCartOpen(false)}></div>
+          <div className="absolute right-0 top-0 h-full w-full max-w-md bg-white shadow-2xl flex flex-col">
+            <div className="flex items-center justify-between border-b border-slate-100 px-6 py-4">
+              <div><h2 className="text-lg font-bold text-slate-900">Your cart</h2><p className="text-xs text-slate-500">{cart.length} item{cart.length === 1 ? '' : 's'}</p></div>
+              <button type="button" onClick={() => setCartOpen(false)} className="rounded-full p-2 text-slate-500 hover:bg-slate-100"><XIcon className="h-5 w-5" /></button>
+            </div>
+            <div className="flex-1 overflow-y-auto px-6 py-4">
+              {cart.length === 0 ? (<div className="flex flex-col items-center justify-center py-16 text-center"><ShoppingCart className="h-8 w-8 text-slate-300 mb-2" /><p className="text-sm text-slate-600">Your cart is empty</p></div>) : (<div className="space-y-3">{cart.map((item) => (<div key={item.productId} className="flex gap-3 rounded-xl border border-slate-100 p-3"><div className="h-16 w-16 bg-slate-100 rounded-lg overflow-hidden flex-shrink-0">{item.imageUrl ? <img src={item.imageUrl} alt={item.name} className="h-full w-full object-cover"/> : <div className="flex h-full w-full items-center justify-center"><StoreIcon className="h-5 w-5 text-slate-400"/></div>}</div><div className="flex-1 min-w-0"><div className="flex justify-between gap-2"><p className="text-sm font-semibold truncate">{item.name}</p><button onClick={() => removeFromCart(item.productId)} className="text-slate-400 hover:text-red-600"><TrashIcon className="h-4 w-4"/></button></div><p className="text-sm font-bold mt-1" style={{color:primaryColor}}>{formatMoney(item.priceCents, shop.currency)}</p><div className="mt-2 inline-flex items-center gap-2 rounded-full border border-slate-200 px-2 py-1"><button onClick={() => updateCartQty(item.productId,-1)} className="flex h-6 w-6 items-center justify-center"><MinusIcon className="h-3 w-3"/></button><span className="text-sm w-6 text-center">{item.qty}</span><button onClick={() => updateCartQty(item.productId,1)} className="flex h-6 w-6 items-center justify-center rounded-full text-white" style={{background:primaryColor}}><PlusIcon className="h-3 w-3"/></button></div></div></div>))}</div>)}</div>
+            {cart.length>0 && (<div className="border-t border-slate-100 p-6 space-y-3"><div className="flex justify-between"><span className="text-slate-600">Subtotal</span><span className="font-bold text-slate-900">{formatMoney(subtotalCents, shop.currency)}</span></div><input value={customerName} onChange={(e)=>setCustomerName(e.target.value)} placeholder="Full name" className="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900/10" /><input value={customerPhone} onChange={(e)=>setCustomerPhone(e.target.value)} placeholder="Phone number" className="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900/10" /><input value={customerEmail} onChange={(e)=>setCustomerEmail(e.target.value)} placeholder="Email (optional)" className="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900/10" /><Button onClick={handleCheckout} disabled={submitting} className="w-full rounded-full py-2.5" style={{background:primaryColor}}>{submitting?'Placing order...':'Place order'}</Button></div>)}
+          </div>
+        </div>
+      ) : null}
 
         <footer className="mt-20 border-t border-slate-200 py-10">
           <div className="grid gap-8 md:grid-cols-3 text-sm">
@@ -891,7 +771,7 @@ export function StorefrontContent({ shopReference }: { shopReference: string }) 
                 <span className="font-bold text-slate-900">{shop.businessName || shop.name}</span>
               </div>
               <p className="mt-3 text-slate-500 max-w-sm">
-                {shop.storefrontDescription ?? 'Shop online with confidence — delivered or ready for pickup.'}
+                {shop.storefrontDescription ?? 'Shop online with confidence Ã¢â‚¬â€ delivered or ready for pickup.'}
               </p>
             </div>
             <div className="space-y-2 text-slate-600">
@@ -910,7 +790,7 @@ export function StorefrontContent({ shopReference }: { shopReference: string }) 
             </div>
           </div>
           <div className="mt-8 border-t border-slate-100 pt-4 text-center text-[11px] text-slate-400">
-            © {new Date().getFullYear()} {shop.businessName || shop.name} · Powered by Kounter
+            Ã‚Â© {new Date().getFullYear()} {shop.businessName || shop.name} Ã‚Â· Powered by Kounter
           </div>
         </footer>
       </main>
@@ -990,3 +870,6 @@ function ProductCard({
     </Card>
   )
 }
+
+
+
